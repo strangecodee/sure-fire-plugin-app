@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REST API Documentation - Otabhyarthi Batch 24</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .wrapper {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .top-header {
+            background: #fff;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 1rem 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .logo span {
+            color: #0066cc;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #666;
+            font-size: 0.9rem;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: #0066cc;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            width: 100%;
+        }
+
+        .page-header {
+            margin-bottom: 3rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            font-size: 1rem;
+            color: #666;
+        }
+
+        /* Endpoint Section */
+        .endpoint-section {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .endpoint-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .http-method {
+            background: #0066cc;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .endpoint-path {
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            color: #1a1a1a;
+            font-weight: 600;
+        }
+
+        .endpoint-description {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        /* Parameter Table */
+        .params-section {
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+        }
+
+        .params-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .params-table thead {
+            background: #f8f9fa;
+        }
+
+        .params-table th {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .params-table td {
+            padding: 0.75rem 1rem;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .params-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .param-name {
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+            font-weight: 500;
+        }
+
+        .param-type {
+            color: #0066cc;
+            font-weight: 500;
+        }
+
+        /* Response Examples */
+        .examples-section {
+            margin-top: 2rem;
+        }
+
+        .example-card {
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .example-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .example-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .example-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .badge-pass {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-fail {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .example-url {
+            font-family: 'Courier New', monospace;
+            background: #f8f9fa;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: #0066cc;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .response-label {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .code-block {
+            font-family: 'Courier New', monospace;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 1rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            overflow-x: auto;
+            border: 1px solid #333;
+        }
+
+        .test-link {
+            margin-top: 1rem;
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: #0066cc;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: background 0.2s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .test-link:hover {
+            background: #0052a3;
+        }
+
+        .live-response {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .live-response.show {
+            display: block;
+        }
+
+        .live-response-label {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .loading {
+            color: #0066cc;
+            font-style: italic;
+        }
+
+        /* Footer */
+        .footer {
+            background: #fff;
+            border-top: 1px solid #e0e0e0;
+            padding: 1.5rem 0;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .tech-tags {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .tech-tag {
+            background: #f5f5f5;
+            padding: 0.25rem 0.625rem;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .endpoint-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Top Header -->
+        <header class="top-header">
+            <div class="header-content">
+                <div class="logo">
+                    <span>Otabhyarthi</span> Batch 24
+                </div>
+                <nav class="nav-links">
+                    <a href="/">Home</a>
+                    <a href="/api-docs">API Docs</a>
+                    <a href="/about">About Surefire</a>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">REST API Documentation</h1>
+                <p class="page-subtitle">Test and explore the Student Result Checker API</p>
+            </div>
+
+            <!-- Endpoint Details -->
+            <div class="endpoint-section">
+                <div class="endpoint-header">
+                    <span class="http-method">GET</span>
+                    <span class="endpoint-path">/api/result/{marks}</span>
+                </div>
+                <p class="endpoint-description">
+                    Check student result by marks. Returns JSON response with pass/fail status.
+                </p>
+
+                <!-- Parameters -->
+                <div class="params-section">
+                    <h3 class="section-title">Path Parameters</h3>
+                    <table class="params-table">
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Type</th>
+                                <th>Required</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="param-name">marks</td>
+                                <td class="param-type">integer</td>
+                                <td>Yes</td>
+                                <td>Student marks (0-100)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Response Structure -->
+                <div class="params-section">
+                    <h3 class="section-title">Response Schema</h3>
+                    <div class="code-block">{
+    "marks": "integer",
+    "result": "string (Pass/Fail)",
+    "message": "string"
+}</div>
+                </div>
+            </div>
+
+            <!-- Live Examples -->
+            <div class="examples-section">
+                <h2 class="section-title">Live API Examples</h2>
+                <p style="color: #666; margin-bottom: 1.5rem;">
+                    These examples show actual API responses generated from the service.
+                </p>
+
+                <div th:each="example : ${examples}" class="example-card">
+                    <div class="example-header">
+                        <h3 class="example-title">
+                            Example: <span th:text="${example.marks}"></span> Marks
+                        </h3>
+                        <span class="example-badge" th:id="'badge-' + ${example.marks}" style="display: none;">
+                        </span>
+                    </div>
+
+                    <div class="example-url" th:text="'http://localhost:8080' + ${example.url}">
+                    </div>
+
+                    <button class="test-link" th:attr="data-url=${example.url},data-response-id='response-' + ${example.marks},data-badge-id='badge-' + ${example.marks}" onclick="testApi(this.getAttribute('data-url'), this.getAttribute('data-response-id'), this.getAttribute('data-badge-id'))">
+                        Test This API →
+                    </button>
+
+                    <div th:id="'response-' + ${example.marks}" class="live-response">
+                        <div class="live-response-label">Live Response:</div>
+                        <div class="code-block"><span class="loading">Loading...</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Usage Notes -->
+            <div class="endpoint-section" style="margin-top: 2rem;">
+                <h3 class="section-title">Usage Notes</h3>
+                <ul style="color: #666; font-size: 0.9rem; line-height: 2; margin-left: 1.5rem;">
+                    <li>Valid marks range: 0 to 100</li>
+                    <li>Passing threshold: <strong th:text="${passingMarks}"></strong> marks</li>
+                    <li>Result is "Pass" if marks ≥ <strong th:text="${passingMarks}"></strong>, otherwise "Fail"</li>
+                    <li>Content-Type: application/json</li>
+                    <li>No authentication required</li>
+                </ul>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div>Developed by <strong>Anurag Maurya</strong> &copy; 2026</div>
+                <div class="tech-tags">
+                    <span class="tech-tag">Java 17</span>
+                    <span class="tech-tag">Spring Boot 3.5</span>
+                    <span class="tech-tag">Thymeleaf</span>
+                    <span class="tech-tag">Maven</span>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        async function testApi(url, responseId, badgeId) {
+            const responseDiv = document.getElementById(responseId);
+            const codeBlock = responseDiv.querySelector('.code-block');
+            const badge = document.getElementById(badgeId);
+            
+            // Show loading state
+            responseDiv.classList.add('show');
+            codeBlock.innerHTML = '<span class="loading">Loading...</span>';
+            
+            try {
+                // Make API call
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                // Format and display response
+                const formattedJson = JSON.stringify(data, null, 4);
+                codeBlock.textContent = formattedJson;
+                
+                // Update badge with result
+                badge.textContent = data.result;
+                badge.style.display = 'inline-block';
+                if (data.result === 'Pass') {
+                    badge.className = 'example-badge badge-pass';
+                } else {
+                    badge.className = 'example-badge badge-fail';
+                }
+            } catch (error) {
+                codeBlock.innerHTML = `<span style="color: #f44;">Error: ${error.message}</span>`;
+            }
+        }
+    </script>
+</body>
+</html>
