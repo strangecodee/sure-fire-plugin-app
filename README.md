@@ -124,6 +124,65 @@ That 16? It's 15 tests from `ResultServiceTest` + 1 Spring context load test.
 
 ---
 
+## <img src="https://cdn.simpleicons.org/sonarqube" width="24" height="24" /> Code Quality, Coverage & Stability
+
+This project integrates a small **quality pipeline** on top of Surefire:
+
+| Goal | Tool | What it does |
+|------|------|----------------|
+| **Code stability** | Maven Surefire + `verify` | Tests must pass; build fails on regression |
+| **Code coverage** | JaCoCo | Measures line/branch coverage; HTML report + XML for Sonar |
+| **Code quality** | SpotBugs + SonarQube | Static analysis (bugs, smells, security hotspots) |
+
+### Local commands
+
+```bash
+# Tests only (Surefire) — fastest for day-to-day dev
+./mvnw clean test
+
+# Full pipeline: tests + JaCoCo report + SpotBugs
+./mvnw clean verify
+
+# Same as verify, plus 80% line coverage on service layer
+./mvnw clean verify -Pquality-gate
+
+# Skip SpotBugs for a quick coverage run
+./mvnw clean verify -Pskip-spotbugs
+
+# Open coverage report (after verify)
+# target/site/jacoco/index.html
+```
+
+### SonarQube / SonarCloud
+
+1. Create a project on [SonarCloud](https://sonarcloud.io) or your SonarQube server.
+2. Set `sonar.host.url` (SonarCloud: `https://sonarcloud.io`).
+3. Run analysis (replace org/key with yours):
+
+```bash
+export SONAR_TOKEN=your_token_here
+
+./mvnw clean verify sonar:sonar \
+  -Dsonar.host.url=https://sonarcloud.io \
+  -Dsonar.organization=your_org \
+  -Dsonar.projectKey=com.demo:surefiretestdemo
+```
+
+Project defaults live in `sonar-project.properties`. JaCoCo XML at `target/site/jacoco/jacoco.xml` is picked up automatically.
+
+### CI (GitHub Actions)
+
+Workflow: `.github/workflows/quality.yml`
+
+- Every push/PR: `verify` + JaCoCo artifact + optional Sonar job
+- To enable Sonar in CI: add secret `SONAR_TOKEN`, variables `SONAR_ENABLED=true`, `SONAR_ORGANIZATION`, `SONAR_PROJECT_KEY`
+
+### Coverage note
+
+Unit tests focus on `ResultService` (15 tests). Web controllers are not covered yet, so **project-wide** coverage is low until you add `@WebMvcTest` or integration tests. The `quality-gate` profile enforces **80% on the service package** only.
+
+---
+
 ## <img src="https://cdn.simpleicons.org/docker" width="24" height="24" /> Why This Matters for DevOps
 
 In real-world projects, you don't manually run tests before every deployment. That's where Surefire + CI/CD comes in:
