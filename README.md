@@ -1,89 +1,157 @@
-# Student Result Checker\n\n<div align="center">\n\n![Java](https://img.shields.io/badge/Java-17-orange?style=flat-square&logo=openjdk&logoColor=white)\n![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.14-brightgreen?style=flat-square&logo=spring&logoColor=white)\n![Maven](https://img.shields.io/badge/Maven-3.x-red?style=flat-square&logo=apache-maven&logoColor=white)\n![Tests](https://img.shields.io/badge/Tests-16%20Passing-success?style=flat-square&logo=junit5&logoColor=white)\n\n</div>
+# Student Result Checker
 
-A simple Spring Boot app I built to demonstrate how Maven Surefire Plugin works in real projects. Perfect for anyone trying to understand automated testing in Java/DevOps workflows.
+<div align="center">
 
----
+[![Java](https://img.shields.io/badge/Java-17-orange?style=flat-square&logo=openjdk&logoColor=white)](https://openjdk.org/)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.14-6DB33F?style=flat-square&logo=springboot&logoColor=white)](https://spring.io/projects/spring-boot)
+[![Maven](https://img.shields.io/badge/Maven-Wrapper-C71A36?style=flat-square&logo=apachemaven&logoColor=white)](https://maven.apache.org/)
+[![Tests](https://img.shields.io/badge/Tests-16%20passing-success?style=flat-square&logo=junit5&logoColor=white)](./src/test/java)
+[![JaCoCo](https://img.shields.io/badge/Coverage-JaCoCo-blue?style=flat-square)](https://www.jacoco.org/jacoco/)
+[![SonarQube](https://img.shields.io/badge/Quality-SonarQube-4E9BCD?style=flat-square&logo=sonarqube&logoColor=white)](https://www.sonarqube.org/)
 
-## <img src="https://cdn.simpleicons.org/java" width="24" height="24" /> What This Does
+**Spring Boot reference app for automated testing, coverage, and static analysis in Maven CI/CD pipelines.**
 
-Basically, it's a student result checking system. You enter marks (0-100), and it tells you if you passed or failed. The passing threshold is **40 marks**.
+[Quick Start](#quick-start) · [Quality Pipeline](#quality-pipeline) · [API](#api-reference) · [Project Layout](#project-layout)
 
-But the real purpose? Showing how Maven Surefire automatically runs your tests during the build process - no manual intervention needed.
-
----
-
-## <img src="https://cdn.simpleicons.org/markdown" width="24" height="24" /> Quick Screenshots
-
-### Home Page
-![Home Page](screenshots/home-page.png)
-*The main result checker interface - clean and straightforward*
-
-### API Documentation
-![API Docs](screenshots/api-docs.png)
-*Interactive API docs where you can test endpoints live*
-
-### About Surefire
-![About Surefire](screenshots/about-surefire.png)
-*Educational page explaining how Surefire fits into Maven lifecycle*
-
-### Test Results
-![Test Results](screenshots/test-results.png)
-*Surefire running 16 tests automatically during `mvn test`*
+</div>
 
 ---
 
-## <img src="https://cdn.simpleicons.org/technology" width="24" height="24" /> Tech Stack
+## Overview
 
-<img src="https://cdn.simpleicons.org/java" width="40" height="40" /> **Java 17**
+A minimal **student result checker** (pass threshold: **40 marks**, valid range: **0–100**) used to demonstrate production-style Java quality practices:
 
-<img src="https://cdn.simpleicons.org/springboot" width="40" height="40" /> **Spring Boot 3.5.14**
+- **Unit tests** executed automatically via the Maven Surefire Plugin
+- **Code coverage** reported with JaCoCo
+- **Static analysis** with SpotBugs and optional SonarQube/SonarCloud upload
 
-<img src="https://cdn.simpleicons.org/thymeleaf" width="40" height="40" /> **Thymeleaf** (for the web pages)
-
-<img src="https://cdn.simpleicons.org/junit5" width="40" height="40" /> **JUnit 5** (testing framework)
-
-<img src="https://cdn.simpleicons.org/apachemaven" width="40" height="40" /> **Maven Surefire Plugin 3.2.5** (the star of the show)
+The application exposes a Thymeleaf web UI and a JSON REST API. Business rules live in `ResultService`; HTTP handling is in `ResultController`.
 
 ---
 
-## <img src="https://cdn.simpleicons.org/terminal" width="24" height="24" /> How to Run It
+## Features
+
+| Area | Description |
+|------|-------------|
+| Web UI | Enter marks, view pass/fail, quick-test presets |
+| REST API | `GET /api/result/{marks}` returns structured JSON |
+| In-app docs | `/api-docs` and `/about` (Surefire & quality tooling) |
+| Test suite | 16 JUnit 5 tests (service + Spring context) |
+| Quality gates | Surefire, JaCoCo, SpotBugs; optional Sonar analysis |
+
+---
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|------------|
+| Runtime | Java 17 |
+| Framework | Spring Boot 3.5.14 |
+| View | Thymeleaf |
+| Testing | JUnit 5, Spring Boot Test |
+| Build | Maven (wrapper included) |
+| Plugins | Surefire 3.2.5, JaCoCo 0.8.12, SpotBugs, Sonar Scanner |
+
+---
+
+## Quick Start
 
 ### Prerequisites
-- Java 17 or higher
-- Maven installed
 
-### Running the App
+- **JDK 17+**
+- No global Maven install required — use the included wrapper (`./mvnw`)
+
+### Run the application
 
 ```bash
-# Clone and navigate to the project
-cd surefiretestdemo
+git clone <repository-url>
+cd sure-fire-plugin-app
 
-# Build and run tests (this is where Surefire kicks in)
-mvn clean test
-
-# Start the application
-mvn spring-boot:run
+./mvnw spring-boot:run
 ```
 
-Once it's running, open your browser and go to:
-**http://localhost:8080**
+Open **http://localhost:8080**
+
+### Run tests (Surefire)
+
+```bash
+./mvnw clean test
+```
+
+Expected output:
+
+```text
+Tests run: 16, Failures: 0, Errors: 0, Skipped: 0
+BUILD SUCCESS
+```
+
+Reports: `target/surefire-reports/`
 
 ---
 
-## <img src="https://cdn.simpleicons.org/googlechrome" width="24" height="24" /> What You'll See
+## Quality Pipeline
 
-### Web Interface
-The home page has a simple form where you can enter student marks. Hit "Check Result" and you'll instantly see if the student passed or failed, along with a detailed breakdown.
-
-There are also quick-test buttons if you just want to click around and see how it works.
-
-### REST API
-Prefer working with JSON? There's a REST endpoint at:
-```
-GET http://localhost:8080/api/result/{marks}
+```mermaid
+flowchart LR
+  A[mvn test] --> B[Surefire]
+  B --> C[mvn verify]
+  C --> D[JaCoCo Report]
+  C --> E[SpotBugs]
+  C --> F[Optional: sonar:sonar]
 ```
 
-Example response:
+### Commands
+
+| Command | Purpose |
+|---------|---------|
+| `./mvnw clean test` | Unit tests only (fast feedback) |
+| `./mvnw clean verify` | Tests + JaCoCo HTML/XML + SpotBugs |
+| `./mvnw clean verify -Pquality-gate` | Above + 80% line coverage on `service` package |
+| `./mvnw clean verify -Pskip-spotbugs` | Tests + coverage without SpotBugs |
+
+### Reports
+
+| Report | Path |
+|--------|------|
+| Test results | `target/surefire-reports/` |
+| Coverage (HTML) | `target/site/jacoco/index.html` |
+| Coverage (XML, for Sonar) | `target/site/jacoco/jacoco.xml` |
+
+### SonarCloud / SonarQube
+
+1. Create a project at [SonarCloud](https://sonarcloud.io) or on your SonarQube server.
+2. Generate an analysis token.
+3. Run (replace placeholders):
+
+```bash
+export SONAR_TOKEN=<your-token>
+
+./mvnw clean verify sonar:sonar \
+  -Dsonar.host.url=https://sonarcloud.io \
+  -Dsonar.organization=<your-organization> \
+  -Dsonar.projectKey=com.demo:surefiretestdemo
+```
+
+Defaults are in [`sonar-project.properties`](./sonar-project.properties). JaCoCo XML is consumed automatically via `pom.xml` properties.
+
+### Coverage scope
+
+Tests focus on `ResultService` (15 cases + 1 context test). Controller endpoints are not yet covered by `@WebMvcTest`; project-wide coverage will appear lower in Sonar until those tests are added. The `quality-gate` profile enforces **80% line coverage on the service layer only**.
+
+---
+
+## API Reference
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/` | Home page (result form) |
+| `GET` | `/check?marks={0-100}` | Web result view |
+| `GET` | `/api/result/{marks}` | JSON result |
+| `GET` | `/api-docs` | API documentation page |
+| `GET` | `/about` | Surefire & quality tooling overview |
+
+**Example — `GET /api/result/75`**
+
 ```json
 {
   "marks": 75,
@@ -92,185 +160,87 @@ Example response:
 }
 ```
 
-### API Documentation
-Hit `/api-docs` to see interactive documentation where you can actually test the API endpoints right from the browser.
+**Invalid input — `GET /api/result/150`**
+
+```json
+{
+  "marks": 150,
+  "result": "Error",
+  "message": "Invalid marks! Please enter marks between 0 and 100."
+}
+```
 
 ---
 
-## <img src="https://cdn.simpleicons.org/jest" width="24" height="24" /> The Testing Part (Where Surefire Shines)
+## Test Coverage
 
-This project comes with **15 comprehensive test cases** that cover:
+`ResultServiceTest` includes scenarios for:
 
-- Typical passing scenarios (75, 85, 100 marks)
-- Typical failing scenarios (20, 0, 35 marks)
-- Boundary conditions (exactly 40, 39, 41 marks)
-- Edge cases (0 marks, perfect 100)
-- Multiple value tests for consistency
-- Null-safety checks
+- Pass and fail paths (typical marks)
+- Boundary values (39, 40, 41)
+- Edge cases (0, 100)
+- Parameterized and consistency checks
 
-When you run `mvn test`, Surefire automatically:
-1. Finds all test files matching `*Test.java` or `*Tests.java`
-2. Runs every single test method
-3. Generates reports in `target/surefire-reports/`
-4. Fails the build if any test breaks
-
-You'll see output like:
-```
-[INFO] Tests run: 16, Failures: 0, Errors: 0, Skipped: 0
-[INFO] BUILD SUCCESS
-```
-
-That 16? It's 15 tests from `ResultServiceTest` + 1 Spring context load test.
+Surefire discovers classes matching `*Test.java` and `*Tests.java` during the `test` phase and **fails the build** on any failure—suitable for CI quality gates.
 
 ---
 
-## <img src="https://cdn.simpleicons.org/sonarqube" width="24" height="24" /> Code Quality, Coverage & Stability
+## Project Layout
 
-This project integrates a small **quality pipeline** on top of Surefire:
-
-| Goal | Tool | What it does |
-|------|------|----------------|
-| **Code stability** | Maven Surefire + `verify` | Tests must pass; build fails on regression |
-| **Code coverage** | JaCoCo | Measures line/branch coverage; HTML report + XML for Sonar |
-| **Code quality** | SpotBugs + SonarQube | Static analysis (bugs, smells, security hotspots) |
-
-### Local commands
-
-```bash
-# Tests only (Surefire) — fastest for day-to-day dev
-./mvnw clean test
-
-# Full pipeline: tests + JaCoCo report + SpotBugs
-./mvnw clean verify
-
-# Same as verify, plus 80% line coverage on service layer
-./mvnw clean verify -Pquality-gate
-
-# Skip SpotBugs for a quick coverage run
-./mvnw clean verify -Pskip-spotbugs
-
-# Open coverage report (after verify)
-# target/site/jacoco/index.html
-```
-
-### SonarQube / SonarCloud
-
-1. Create a project on [SonarCloud](https://sonarcloud.io) or your SonarQube server.
-2. Set `sonar.host.url` (SonarCloud: `https://sonarcloud.io`).
-3. Run analysis (replace org/key with yours):
-
-```bash
-export SONAR_TOKEN=your_token_here
-
-./mvnw clean verify sonar:sonar \
-  -Dsonar.host.url=https://sonarcloud.io \
-  -Dsonar.organization=your_org \
-  -Dsonar.projectKey=com.demo:surefiretestdemo
-```
-
-Project defaults live in `sonar-project.properties`. JaCoCo XML at `target/site/jacoco/jacoco.xml` is picked up automatically.
-
-### CI (GitHub Actions)
-
-Workflow: `.github/workflows/quality.yml`
-
-- Every push/PR: `verify` + JaCoCo artifact + optional Sonar job
-- To enable Sonar in CI: add secret `SONAR_TOKEN`, variables `SONAR_ENABLED=true`, `SONAR_ORGANIZATION`, `SONAR_PROJECT_KEY`
-
-### Coverage note
-
-Unit tests focus on `ResultService` (15 tests). Web controllers are not covered yet, so **project-wide** coverage is low until you add `@WebMvcTest` or integration tests. The `quality-gate` profile enforces **80% on the service package** only.
-
----
-
-## <img src="https://cdn.simpleicons.org/docker" width="24" height="24" /> Why This Matters for DevOps
-
-In real-world projects, you don't manually run tests before every deployment. That's where Surefire + CI/CD comes in:
-
-- **Every code push** → Tests run automatically
-- **Tests fail** → Pipeline stops, team gets notified
-- **Tests pass** → Code moves to staging/production
-- **Zero manual work** → Consistent, reliable quality gates
-
-This simple app demonstrates exactly that workflow. The tests you see here would run the same way in a massive enterprise pipeline.
-
----
-
-## <img src="https://cdn.simpleicons.org/visualstudiocode" width="24" height="24" /> Project Structure
-
-```
-surefiretestdemo/
-├── src/main/java/com/demo/surefiretest/
-│   ├── SurefiretestdemoApplication.java    # Main class
-│   ├── controller/
-│   │   └── ResultController.java           # Handles web + API
-│   └── service/
-│       └── ResultService.java              # Business logic
-│
+```text
+sure-fire-plugin-app/
+├── pom.xml                          # Build, Surefire, JaCoCo, SpotBugs, Sonar
+├── sonar-project.properties         # Sonar scanner defaults
+├── mvnw, mvnw.cmd                   # Maven wrapper
+├── src/main/java/.../surefiretest/
+│   ├── SurefiretestdemoApplication.java
+│   ├── controller/ResultController.java
+│   └── service/ResultService.java
 ├── src/main/resources/
-│   ├── application.properties              # Config
-│   └── templates/                          # HTML pages
-│       ├── index.html                      # Home
-│       ├── api-docs.html                   # API docs
-│       └── about.html                      # About Surefire
-│
-├── src/test/java/com/demo/surefiretest/
-│   ├── SurefiretestdemoApplicationTests.java
-│   └── service/
-│       └── ResultServiceTest.java          # 15 tests here
-│
-└── pom.xml                                 # Maven config
+│   ├── application.properties
+│   └── templates/                   # index, api-docs, about
+└── src/test/java/.../
+    ├── SurefiretestdemoApplicationTests.java
+    └── service/ResultServiceTest.java
 ```
 
 ---
 
-## <img src="https://cdn.simpleicons.org/postman" width="24" height="24" /> Key Endpoints
+## Screenshots
 
-| URL | What It Does |
-|-----|-------------|
-| `/` | Main result checker page |
-| `/check?marks=75` | Check result via web |
-| `/api/result/75` | Get JSON response |
-| `/api-docs` | Interactive API documentation |
-| `/about` | Learn about Maven Surefire |
+Place images under `screenshots/` to render below:
 
----
+| File | Content |
+|------|---------|
+| `home-page.png` | Main UI |
+| `api-docs.png` | API docs page |
+| `about-surefire.png` | About / Surefire page |
+| `test-results.png` | `mvn test` terminal output |
 
-## <img src="https://cdn.simpleicons.org/github" width="24" height="24" /> Adding Your Own Screenshots
-
-I've added placeholder paths for screenshots in this README. Here's how to add yours:
-
-1. Create a `screenshots` folder in the project root:
-   ```bash
-   mkdir screenshots
-   ```
-
-2. Take screenshots and save them as:
-   - `home-page.png` - The main page
-   - `api-docs.png` - API documentation page
-   - `about-surefire.png` - About page
-   - `test-results.png` - Terminal output from `mvn test`
-
-3. The images will automatically show up in this README.
-
-**Pro tip**: On Windows, you can use `Win + Shift + S` to take screenshots quickly.
+```bash
+mkdir -p screenshots
+```
 
 ---
 
-## <img src="https://cdn.simpleicons.org/personio" width="24" height="24" /> Built By
+## DevOps Relevance
 
-**Anurag Maurya** - Otabhyarthi Batch 24
+Typical pipeline flow mirrored by this project:
+
+1. **Commit / PR** triggers `./mvnw clean verify -Pquality-gate`
+2. **Surefire** blocks merge on test failure
+3. **JaCoCo** publishes coverage metrics
+4. **SpotBugs / Sonar** surface defects and quality regressions
+5. **Deploy** only after the build is green
 
 ---
 
-## <img src="https://cdn.simpleicons.org/opensourceinitiative" width="24" height="24" /> License
+## Author
 
-Free to use for learning and demonstration purposes.
+**Anurag Maurya** — Otabhyarthi Batch 24
 
 ---
 
-## <img src="https://cdn.simpleicons.org/discord" width="24" height="24" /> Got Questions?
+## License
 
-If you're learning about Maven Surefire or setting up automated testing for the first time, this project is a great starting point. The code is well-commented, and the `/about` page explains the concepts in plain English.
-
-Happy testing!
+Free for learning and demonstration purposes.
