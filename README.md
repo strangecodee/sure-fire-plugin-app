@@ -1,4 +1,4 @@
-# Student Result Checker
+# Academic Result Evaluation Platform
 
 <div align="center">
 
@@ -19,7 +19,7 @@
 
 ## Overview
 
-A minimal **student result checker** (pass threshold: **40 marks**, valid range: **0–100**) used to demonstrate production-style Java quality practices:
+An **academic result evaluation service** (pass threshold: **40 marks**, valid range: **0–100**) used to demonstrate production-style Java quality practices:
 
 - **Unit tests** executed automatically via the Maven Surefire Plugin
 - **Code coverage** reported with JaCoCo
@@ -129,7 +129,7 @@ export SONAR_TOKEN=<your-token>
 ./mvnw clean verify sonar:sonar \
   -Dsonar.host.url=https://sonarcloud.io \
   -Dsonar.organization=<your-organization> \
-  -Dsonar.projectKey=com.demo:surefiretestdemo
+  -Dsonar.projectKey=com.demo:academic-result-platform
 ```
 
 Defaults are in [`sonar-project.properties`](./sonar-project.properties). JaCoCo XML is consumed automatically via `pom.xml` properties.
@@ -237,7 +237,7 @@ Typical pipeline flow mirrored by this project:
 
 ## Author
 
-**Anurag Maurya** — Otabhyarthi Batch 24
+**Anurag Maurya**
 
 ---
 

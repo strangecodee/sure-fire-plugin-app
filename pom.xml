@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.demo</groupId>
-	<artifactId>surefiretestdemo</artifactId>
+	<artifactId>academic-result-platform</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>surefiretestdemo</name>
-	<description>Student Result Checker - Maven Surefire Plugin Demo for Presentation</description>
+	<name>academic-result-platform</name>
+	<description>Academic Result Evaluation Platform — automated testing, coverage, and quality analysis</description>
 	<url/>
 	<licenses>
 		<license/>

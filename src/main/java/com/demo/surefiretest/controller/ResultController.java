@@ -36,7 +36,7 @@ public class ResultController {
      */
     @GetMapping("/")
     public String homePage(Model model) {
-        model.addAttribute("title", "Student Result Checker");
+        model.addAttribute("title", "Academic Result Evaluation Platform");
         model.addAttribute("passingMarks", resultService.getPassingMarks());
         return "index";  // Returns templates/index.html
     }
@@ -83,7 +83,7 @@ public class ResultController {
      */
     @GetMapping("/about")
     public String aboutPage(Model model) {
-        model.addAttribute("title", "About Maven Surefire Plugin");
+        model.addAttribute("title", "Quality Pipeline & Maven Surefire");
         return "about";  // Returns templates/about.html
     }
 
@@ -98,7 +98,7 @@ public class ResultController {
      */
     @GetMapping("/check")
     public String checkResultWeb(@RequestParam(required = false) Integer marks, Model model) {
-        model.addAttribute("title", "Student Result Checker");
+        model.addAttribute("title", "Academic Result Evaluation Platform");
         model.addAttribute("passingMarks", resultService.getPassingMarks());
         
         if (marks != null) {

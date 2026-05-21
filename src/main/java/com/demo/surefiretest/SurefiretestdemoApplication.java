@@ -14,7 +14,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * 
  * To run the application:
  * 1. mvn spring-boot:run
- * 2. java -jar target/surefiretestdemo-0.0.1-SNAPSHOT.jar
+ * 2. java -jar target/academic-result-platform-0.0.1-SNAPSHOT.jar
  */
 @SpringBootApplication
 public class SurefiretestdemoApplication {

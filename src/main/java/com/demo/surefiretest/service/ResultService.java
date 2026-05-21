@@ -3,7 +3,7 @@ package com.demo.surefiretest.service;
 import org.springframework.stereotype.Service;
 
 /**
- * ResultService - Business Logic for Student Result Checking
+ * ResultService - Business logic for academic result evaluation
  * 
  * This service contains the core logic to determine if a student passes or fails.
  * - If marks >= 40: Student PASSES
