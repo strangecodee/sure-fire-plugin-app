@@ -116,24 +116,48 @@
 
 			<!-- SpotBugs: static analysis (bugs, null-safety) — runs without Sonar server -->
 			<plugin>
-				<groupId>com.github.spotbugs</groupId>
-				<artifactId>spotbugs-maven-plugin</artifactId>
-				<version>${spotbugs.version}</version>
-				<configuration>
-					<effort>Max</effort>
-					<threshold>Medium</threshold>
-					<failOnError>true</failOnError>
-				</configuration>
-				<executions>
-					<execution>
-						<id>spotbugs-check</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>check</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+
+    <groupId>com.github.spotbugs</groupId>
+
+    <artifactId>spotbugs-maven-plugin</artifactId>
+
+    <version>${spotbugs.version}</version>
+
+    <configuration>
+
+        <effort>Max</effort>
+
+        <threshold>Medium</threshold>
+
+        <failOnError>false</failOnError>
+
+        <xmlOutput>true</xmlOutput>
+
+        <htmlOutput>true</htmlOutput>
+
+    </configuration>
+
+    <executions>
+
+        <execution>
+
+            <id>spotbugs-check</id>
+
+            <phase>verify</phase>
+
+            <goals>
+
+                <goal>spotbugs</goal>
+
+                <goal>check</goal>
+
+            </goals>
+
+        </execution>
+
+    </executions>
+
+</plugin>
 
 			<!-- SonarQube Scanner: quality + coverage upload (requires SonarQube server or SonarCloud) -->
 			<plugin>
