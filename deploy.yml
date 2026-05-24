@@ -5,8 +5,8 @@
   tasks:
 
     - name: Stop Existing App
-      shell: pkill -f 'java -jar'
-      ignore_errors: yes
+      shell: pkill -f 'java -jar' || true
+      failed_when: false
 
     - name: Create App Directory
       file:
