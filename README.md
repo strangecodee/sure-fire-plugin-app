@@ -1,4 +1,4 @@
-# Academic Result Evaluation Platform
+# Academic Result Evaluation Platform (Only for Demo)
 
 <div align="center">
 
