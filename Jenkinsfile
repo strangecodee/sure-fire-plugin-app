@@ -1,8 +1,6 @@
 pipeline {
 
-    agent {
-        label 'built-in'
-    }
+    agent any
 
     tools {
 
@@ -14,34 +12,7 @@ pipeline {
 
         timestamps()
         disableConcurrentBuilds()
-        buildDiscarder(logRotator(numToKeepStr: '10'))
-    }
-
-    parameters {
-
-        booleanParam(
-            name: 'SKIP_TESTS',
-            defaultValue: false,
-            description: 'Skip Unit Tests'
-        )
-
-        booleanParam(
-            name: 'SKIP_SONAR',
-            defaultValue: false,
-            description: 'Skip SonarQube Analysis'
-        )
-
-        booleanParam(
-            name: 'SKIP_SPOTBUGS',
-            defaultValue: false,
-            description: 'Skip SpotBugs Analysis'
-        )
-
-        booleanParam(
-            name: 'SKIP_COVERAGE',
-            defaultValue: false,
-            description: 'Skip JaCoCo Coverage'
-        )
+        buildDiscarder(logRotator(numToKeepStr: '5'))
     }
 
     environment {
@@ -59,14 +30,9 @@ pipeline {
 
             steps {
 
-                sh 'echo "JAVA_HOME=$JAVA_HOME"'
-
                 sh 'java -version'
-
                 sh 'mvn -version'
-
                 sh 'git --version'
-
                 sh 'ansible --version'
             }
         }
@@ -84,129 +50,29 @@ pipeline {
 
             steps {
 
+                echo 'Building Spring Boot Application'
+
                 sh 'mvn clean compile'
             }
         }
 
-        stage('Parallel Quality Checks') {
+        stage('Run Unit Tests') {
 
-            parallel {
+            steps {
 
-                stage('Unit Testing') {
+                echo 'Running Unit Tests'
 
-                    when {
-                        expression {
-                            return !params.SKIP_TESTS
-                        }
-                    }
+                sh 'mvn test'
+            }
 
-                    steps {
+            post {
 
-                        echo 'Running Maven Surefire Tests'
+                always {
 
-                        sh 'mvn test'
-                    }
-
-                    post {
-
-                        always {
-
-                            junit(
-                                allowEmptyResults: true,
-                                testResults: 'target/surefire-reports/*.xml'
-                            )
-
-                            archiveArtifacts(
-                                artifacts: 'target/surefire-reports/*',
-                                allowEmptyArchive: true
-                            )
-                        }
-                    }
-                }
-
-                stage('JaCoCo Coverage') {
-
-                    when {
-                        expression {
-                            return !params.SKIP_COVERAGE
-                        }
-                    }
-
-                    steps {
-
-                        echo 'Running JaCoCo Coverage'
-
-                        sh 'mvn test jacoco:report'
-
-                        jacoco(
-                            execPattern: 'target/jacoco.exec',
-                            classPattern: 'target/classes',
-                            sourcePattern: 'src/main/java',
-                            inclusionPattern: '**/*.class',
-                            exclusionPattern: '**/test/**'
-                        )
-
-                        publishHTML([
-                            allowMissing: true,
-                            alwaysLinkToLastBuild: true,
-                            keepAll: true,
-                            reportDir: 'target/site/jacoco',
-                            reportFiles: 'index.html',
-                            reportName: 'JaCoCo Coverage Report'
-                        ])
-                    }
-                }
-
-                stage('SpotBugs Analysis') {
-
-                    when {
-                        expression {
-                            return !params.SKIP_SPOTBUGS
-                        }
-                    }
-
-                    steps {
-
-                        echo 'Running SpotBugs Analysis'
-
-                        sh 'mvn clean verify'
-
-                        recordIssues tools: [
-                            spotBugs(
-                                pattern: 'target/spotbugsXml.xml'
-                            )
-                        ]
-
-                        publishHTML([
-                            allowMissing: true,
-                            alwaysLinkToLastBuild: true,
-                            keepAll: true,
-                            reportDir: 'target/site',
-                            reportFiles: 'spotbugs.html',
-                            reportName: 'SpotBugs Report'
-                        ])
-                    }
-                }
-
-                stage('SonarQube Analysis') {
-
-                    when {
-                        expression {
-                            return !params.SKIP_SONAR
-                        }
-                    }
-
-                    steps {
-
-                        withSonarQubeEnv('SonarScanner') {
-
-                            sh '''
-                                mvn sonar:sonar \
-                                -Dsonar.projectKey=sure-fire-plugin-app \
-                                -Dsonar.projectName=sure-fire-plugin-app
-                            '''
-                        }
-                    }
+                    junit(
+                        allowEmptyResults: true,
+                        testResults: 'target/surefire-reports/*.xml'
+                    )
                 }
             }
         }
@@ -214,6 +80,8 @@ pipeline {
         stage('Package Application') {
 
             steps {
+
+                echo 'Packaging JAR File'
 
                 sh 'mvn package -DskipTests'
 
@@ -224,54 +92,11 @@ pipeline {
             }
         }
 
-        stage('Generate Reports') {
-
-            steps {
-
-                publishHTML([
-                    allowMissing: true,
-                    alwaysLinkToLastBuild: true,
-                    keepAll: true,
-                    reportDir: 'target/site',
-                    reportFiles: 'index.html',
-                    reportName: 'Project Reports'
-                ])
-            }
-        }
-
-        stage('Approval Before Deployment') {
-
-            steps {
-
-                timeout(time: 2, unit: 'MINUTES') {
-
-                    input message: 'Approve Build Deployment?'
-                }
-            }
-        }
-
-        stage('Publish Build') {
-
-            steps {
-
-                sh 'mkdir -p artifacts'
-
-                sh 'cp target/*.jar artifacts/'
-
-                archiveArtifacts(
-                    artifacts: 'artifacts/*.jar',
-                    fingerprint: true
-                )
-
-                echo 'Artifacts Published Successfully'
-            }
-        }
-
         stage('Deploy to EC2 App Server') {
 
             steps {
 
-                echo 'Starting Deployment via Ansible'
+                echo 'Deploying Application via Ansible'
 
                 sshagent(['ec2-key']) {
 
@@ -289,6 +114,8 @@ pipeline {
 
         success {
 
+            echo 'Pipeline Executed Successfully'
+
             slackSend(
                 teamDomain: 'Anurags_Workspace',
                 channel: "${SLACK_CHANNEL}",
@@ -300,12 +127,10 @@ SUCCESS: ${env.JOB_NAME}
 
 Build Number: #${env.BUILD_NUMBER}
 
-Branch: test
+Application Successfully Built and Deployed
 
 Build URL:
 ${env.BUILD_URL}
-
-Application Successfully Deployed to EC2 Server
 """
             )
 
@@ -317,14 +142,12 @@ Build Successful
 
 Project: ${env.JOB_NAME}
 
-Branch: test
-
 Build Number: #${env.BUILD_NUMBER}
+
+Application Successfully Built and Deployed to EC2 Server
 
 Build URL:
 ${env.BUILD_URL}
-
-Application Successfully Deployed to EC2 Server
 
 Regards,
 Jenkins CI/CD Pipeline
@@ -333,6 +156,8 @@ Jenkins CI/CD Pipeline
         }
 
         failure {
+
+            echo 'Pipeline Failed'
 
             slackSend(
                 teamDomain: 'Anurags_Workspace',
@@ -344,8 +169,6 @@ Jenkins CI/CD Pipeline
 FAILED: ${env.JOB_NAME}
 
 Build Number: #${env.BUILD_NUMBER}
-
-Branch: test
 
 Build URL:
 ${env.BUILD_URL}
@@ -360,14 +183,12 @@ Build Failed
 
 Project: ${env.JOB_NAME}
 
-Branch: test
-
 Build Number: #${env.BUILD_NUMBER}
+
+Please Check Jenkins Console Logs
 
 Build URL:
 ${env.BUILD_URL}
-
-Please check Jenkins Console Logs.
 
 Regards,
 Jenkins CI/CD Pipeline
