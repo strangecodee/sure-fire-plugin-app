@@ -5,10 +5,9 @@
   tasks:
 
     - name: Stop Existing App
-      shell: |
-        if pgrep -f "java -jar" > /dev/null; then
-          pkill -f "java -jar"
-        fi
+      shell: pkill -f "java -jar" || true
+      failed_when: false
+      changed_when: false
 
     - name: Create App Directory
       file:
