@@ -1,0 +1,15 @@
+- hosts: webservers
+
+  tasks:
+
+    - name: Stop Old App
+      shell: pkill -f 'java -jar' || true
+
+    - name: Copy JAR
+      copy:
+        src: target/academic-result-platform-0.0.1-SNAPSHOT.jar
+        dest: /opt/app.jar
+
+    - name: Start App
+      shell: |
+        nohup java -jar /opt/app.jar > app.log 2>&1 &
