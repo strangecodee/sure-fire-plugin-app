@@ -100,11 +100,12 @@ stage('Deploy to EC2 App Server') {
 
         sh '''
             ansible-playbook \
-            -i /home/ubuntu/Ansible/inventory.ini \
+            -i /var/lib/jenkins/Ansible/inventory.ini \
+            /var/lib/jenkins/Ansible/deploy.yml \
             -u ubuntu \
-            --private-key /home/ubuntu/GitOps.pem \
-            deploy.yml
+            --private-key /var/lib/jenkins/GitOps.pem
         '''
+    }
     }
 }
     }
