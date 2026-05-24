@@ -1,15 +1,24 @@
+---
 - hosts: webservers
+  become: yes
 
   tasks:
 
-    - name: Stop Old App
-      shell: pkill -f 'java -jar' || true
+    - name: Stop Existing App
+      shell: pkill -f 'java -jar'
+      ignore_errors: yes
 
-    - name: Copy JAR
+    - name: Create App Directory
+      file:
+        path: /opt/springboot
+        state: directory
+
+    - name: Copy JAR File
       copy:
-        src: target/academic-result-platform-0.0.1-SNAPSHOT.jar
-        dest: /opt/app.jar
+        src: /var/lib/jenkins/workspace/sure-fire-plugin-app/target/*.jar
+        dest: /opt/springboot/app.jar
+        remote_src: no
 
-    - name: Start App
+    - name: Start Spring Boot App
       shell: |
-        nohup java -jar /opt/app.jar > app.log 2>&1 &
+        nohup java -jar /opt/springboot/app.jar > /opt/springboot/app.log 2>&1 &
