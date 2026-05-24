@@ -92,22 +92,20 @@ pipeline {
             }
         }
 
-        stage('Deploy to EC2 App Server') {
+stage('Deploy to EC2 App Server') {
 
-            steps {
+    steps {
 
-                echo 'Deploying Application via Ansible'
+        echo 'Deploying Application via Ansible'
 
-                sshagent(['ec2-key']) {
-
-                    sh '''
-                        ansible-playbook \
-                        -i /home/ubuntu/Ansible/inventory.ini \
-                        deploy.yml
-                    '''
-                }
-            }
-        }
+        sh '''
+            ansible-playbook \
+            -i /home/ubuntu/Ansible/inventory.ini \
+            --private-key /home/ubuntu/GitOps.pem \
+            deploy.yml
+        '''
+    }
+}
     }
 
     post {
