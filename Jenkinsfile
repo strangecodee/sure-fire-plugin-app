@@ -106,7 +106,6 @@ stage('Deploy to EC2 App Server') {
             --private-key /var/lib/jenkins/GitOps.pem
         '''
     }
-    }
 }
     }
 
