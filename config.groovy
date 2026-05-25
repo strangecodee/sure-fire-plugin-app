@@ -10,7 +10,7 @@ return [
 
     ENVIRONMENT_NAME : 'prod',
 
-    SLACK_CHANNEL_NAME : '#build-status',
+    SLACK_CHANNEL_NAME : '#jenkins-alerts',
 
     ACTION_MESSAGE : 'Application Successfully Deployed',
 
