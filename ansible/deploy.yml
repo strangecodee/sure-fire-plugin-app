@@ -16,7 +16,7 @@
 
     - name: Copy JAR File
       copy:
-        src: /var/lib/jenkins/workspace/GitOps/target/academic-result-platform-0.0.1-SNAPSHOT.jar
+        src: /var/lib/jenkins/workspace/Shared_Library/target/academic-result-platform-0.0.1-SNAPSHOT.jar
         dest: /opt/springboot/app.jar
 
     - name: Start Spring Boot App
