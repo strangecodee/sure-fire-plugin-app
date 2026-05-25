@@ -1,25 +1,5 @@
 @Library('ansible-shared-library') _
 
-pipeline {
+def config = load 'config.groovy'
 
-    agent {
-
-        label 'UBUNTU-NODE'
-    }
-
-    stages {
-
-        stage('Load Config') {
-
-            steps {
-
-                script {
-
-                    def config = load 'config.groovy'
-
-                    ansibleDeploy(config)
-                }
-            }
-        }
-    }
-}
+ansibleDeploy(config)
