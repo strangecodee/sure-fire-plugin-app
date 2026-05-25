@@ -1,7 +1,22 @@
 @Library('ansible-shared-library') _
 
-// Load configuration file
-def config = load 'config.groovy'
+pipeline {
 
-// Execute shared library
-ansibleDeploy(config)
+    agent any
+
+    stages {
+
+        stage('Load Config') {
+
+            steps {
+
+                script {
+
+                    def config = load 'config.groovy'
+
+                    ansibleDeploy(config)
+                }
+            }
+        }
+    }
+}
