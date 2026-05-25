@@ -1,4 +1,5 @@
-[
+return [
+
     REPO_URL : 'https://github.com/strangecodee/sure-fire-plugin-app.git',
 
     BRANCH : 'dev',
