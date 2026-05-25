@@ -1,6 +1,6 @@
 @Library('ansible-shared-library') _
 
-node('UBUNTU-NODE') {
+node('Built-In Node') {
 
     checkout scm
 
