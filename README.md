@@ -1,4 +1,4 @@
-# Academic Result Evaluation Platform (02)
+# Academic Result Evaluation Platform (this is a demo file)
 
 <div align="center">
 
@@ -31,26 +31,26 @@ The application exposes a Thymeleaf web UI and a JSON REST API. Business rules l
 
 ## Features
 
-| Area | Description |
-|------|-------------|
-| Web UI | Enter marks, view pass/fail, quick-test presets |
-| REST API | `GET /api/result/{marks}` returns structured JSON |
-| In-app docs | `/api-docs` and `/about` (Surefire & quality tooling) |
-| Test suite | 16 JUnit 5 tests (service + Spring context) |
-| Quality gates | Surefire, JaCoCo, SpotBugs; optional Sonar analysis |
+| Area          | Description                                               |
+| ------------- | --------------------------------------------------------- |
+| Web UI        | Enter marks, view pass/fail, quick-test presets           |
+| REST API      | `GET /api/result/{marks}` returns structured JSON       |
+| In-app docs   | `/api-docs` and `/about` (Surefire & quality tooling) |
+| Test suite    | 16 JUnit 5 tests (service + Spring context)               |
+| Quality gates | Surefire, JaCoCo, SpotBugs; optional Sonar analysis       |
 
 ---
 
 ## Tech Stack
 
-| Layer | Technology |
-|-------|------------|
-| Runtime | Java 17 |
-| Framework | Spring Boot 3.5.14 |
-| View | Thymeleaf |
-| Testing | JUnit 5, Spring Boot Test |
-| Build | Maven (wrapper included) |
-| Plugins | Surefire 3.2.5, JaCoCo 0.8.12, SpotBugs, Sonar Scanner |
+| Layer     | Technology                                             |
+| --------- | ------------------------------------------------------ |
+| Runtime   | Java 17                                                |
+| Framework | Spring Boot 3.5.14                                     |
+| View      | Thymeleaf                                              |
+| Testing   | JUnit 5, Spring Boot Test                              |
+| Build     | Maven (wrapper included)                               |
+| Plugins   | Surefire 3.2.5, JaCoCo 0.8.12, SpotBugs, Sonar Scanner |
 
 ---
 
@@ -102,19 +102,19 @@ flowchart LR
 
 ### Commands
 
-| Command | Purpose |
-|---------|---------|
-| `./mvnw clean test` | Unit tests only (fast feedback) |
-| `./mvnw clean verify` | Tests + JaCoCo HTML/XML + SpotBugs |
-| `./mvnw clean verify -Pquality-gate` | Above + 80% line coverage on `service` package |
-| `./mvnw clean verify -Pskip-spotbugs` | Tests + coverage without SpotBugs |
+| Command                                 | Purpose                                          |
+| --------------------------------------- | ------------------------------------------------ |
+| `./mvnw clean test`                   | Unit tests only (fast feedback)                  |
+| `./mvnw clean verify`                 | Tests + JaCoCo HTML/XML + SpotBugs               |
+| `./mvnw clean verify -Pquality-gate`  | Above + 80% line coverage on `service` package |
+| `./mvnw clean verify -Pskip-spotbugs` | Tests + coverage without SpotBugs                |
 
 ### Reports
 
-| Report | Path |
-|--------|------|
-| Test results | `target/surefire-reports/` |
-| Coverage (HTML) | `target/site/jacoco/index.html` |
+| Report                    | Path                              |
+| ------------------------- | --------------------------------- |
+| Test results              | `target/surefire-reports/`      |
+| Coverage (HTML)           | `target/site/jacoco/index.html` |
 | Coverage (XML, for Sonar) | `target/site/jacoco/jacoco.xml` |
 
 ### SonarCloud / SonarQube
@@ -142,13 +142,13 @@ Tests focus on `ResultService` (15 cases + 1 context test). Controller endpoints
 
 ## API Reference
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/` | Home page (result form) |
-| `GET` | `/check?marks={0-100}` | Web result view |
-| `GET` | `/api/result/{marks}` | JSON result |
-| `GET` | `/api-docs` | API documentation page |
-| `GET` | `/about` | Surefire & quality tooling overview |
+| Method  | Endpoint                 | Description                         |
+| ------- | ------------------------ | ----------------------------------- |
+| `GET` | `/`                    | Home page (result form)             |
+| `GET` | `/check?marks={0-100}` | Web result view                     |
+| `GET` | `/api/result/{marks}`  | JSON result                         |
+| `GET` | `/api-docs`            | API documentation page              |
+| `GET` | `/about`               | Surefire & quality tooling overview |
 
 **Example — `GET /api/result/75`**
 
@@ -210,12 +210,12 @@ sure-fire-plugin-app/
 
 Place images under `screenshots/` to render below:
 
-| File | Content |
-|------|---------|
-| `home-page.png` | Main UI |
-| `api-docs.png` | API docs page |
-| `about-surefire.png` | About / Surefire page |
-| `test-results.png` | `mvn test` terminal output |
+| File                   | Content                      |
+| ---------------------- | ---------------------------- |
+| `home-page.png`      | Main UI                      |
+| `api-docs.png`       | API docs page                |
+| `about-surefire.png` | About / Surefire page        |
+| `test-results.png`   | `mvn test` terminal output |
 
 ```bash
 mkdir -p screenshots
