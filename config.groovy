@@ -4,13 +4,13 @@ return [
 
     BRANCH : 'dev',
 
-    SLACK_CHANNEL_NAME : '#build-status',
-
-    ENVIRONMENT : 'prod',
-
     INVENTORY : 'ansible/inventory/prod.ini',
 
     PLAYBOOK : 'ansible/deploy.yml',
+
+    ENVIRONMENT_NAME : 'prod',
+
+    SLACK_CHANNEL_NAME : '#build-status',
 
     ACTION_MESSAGE : 'Application Successfully Deployed',
 
