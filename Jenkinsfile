@@ -1,5 +1,5 @@
 @Library('ansible-shared-library') _
 
-def config = load 'config.groovy'
+def config = evaluate(readFile('config.groovy'))
 
 ansibleDeploy(config)
