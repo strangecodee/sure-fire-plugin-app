@@ -14,5 +14,7 @@ return [
 
     ACTION_MESSAGE : 'Application Successfully Deployed',
 
-    KEEP_APPROVAL_STAGE : true
+    KEEP_APPROVAL_STAGE : true,
+
+    EXTRA_ARGS : ''
 ]

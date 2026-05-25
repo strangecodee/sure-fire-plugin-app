@@ -1,5 +1,10 @@
 @Library('ansible-shared-library') _
 
-def config = evaluate(readFile('config.groovy'))
+node('UBUNTU-NODE') {
 
-ansibleDeploy(config)
+    checkout scm
+
+    def config = load 'config.groovy'
+
+    ansibleDeploy(config)
+}
