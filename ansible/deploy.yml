@@ -15,9 +15,8 @@
         state: directory
 
     - name: Copy JAR File
-      copy:
-        src: "{{ workspace }}/target/academic-result-platform-0.0.1-SNAPSHOT.jar"
-        dest: /opt/springboot/app.jar
+      shell: |
+        cp $(find /var/lib/jenkins/workspace -name "*.jar" | grep SNAPSHOT.jar | head -1) /opt/springboot/app.jar
 
     - name: Start Spring Boot App
       shell: |
