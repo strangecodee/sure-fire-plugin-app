@@ -2,7 +2,10 @@
 
 pipeline {
 
-    agent any
+    agent {
+
+        label 'UBUNTU-NODE'
+    }
 
     stages {
 
