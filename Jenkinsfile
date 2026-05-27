@@ -1,6 +1,6 @@
 @Library('ansible-shared-library') _
 
-node('Built-In Node') {
+node('master') {
 
     checkout scm
 
